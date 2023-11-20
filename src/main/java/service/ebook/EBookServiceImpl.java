@@ -1,14 +1,14 @@
-package service;
+package service.ebook;
 
 import model.EBook;
 import repository.book.EBookRepository;
-import repository.book.BookRepositoryMySQL;
+import service.ebook.EBookService;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-public abstract class EBookServiceImpl implements EBookService{
+public abstract class EBookServiceImpl implements EBookService {
     private final EBookRepository eBookRepository;
 
     public EBookServiceImpl(EBookRepository eBookRepository){

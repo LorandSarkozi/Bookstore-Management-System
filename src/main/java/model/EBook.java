@@ -1,8 +1,8 @@
 package model;
 
-import java.util.Date;
+import model.Book;
 
-public class EBook extends Book{
+public class EBook extends Book {
     private String format;
 
 

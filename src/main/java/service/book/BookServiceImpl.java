@@ -1,14 +1,14 @@
-package service;
+package service.book;
 
 import model.Book;
 import repository.book.BookRepository;
-import repository.book.BookRepositoryMySQL;
+import service.book.BookService;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-public class BookServiceImpl implements BookService{
+public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     public BookServiceImpl(BookRepository bookRepository){

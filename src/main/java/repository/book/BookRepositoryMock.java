@@ -1,7 +1,6 @@
 package repository.book;
 
 import model.Book;
-import model.EBook;
 
 import java.util.ArrayList;
 import java.util.List;

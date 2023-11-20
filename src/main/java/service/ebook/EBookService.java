@@ -1,4 +1,4 @@
-package service;
+package service.ebook;
 
 import model.EBook;
 

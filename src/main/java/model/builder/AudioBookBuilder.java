@@ -3,7 +3,6 @@ package model.builder;
 import model.AudioBook;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class AudioBookBuilder {
     private AudioBook audioBook;

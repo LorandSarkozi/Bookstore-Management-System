@@ -1,8 +1,8 @@
 package model;
 
-import java.util.Date;
+import model.Book;
 
-public class AudioBook extends Book{
+public class AudioBook extends Book {
 
 
     private int runTime;

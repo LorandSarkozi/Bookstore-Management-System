@@ -3,7 +3,6 @@ package repository.book;
 import model.EBook;
 import model.builder.EBookBuilder;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

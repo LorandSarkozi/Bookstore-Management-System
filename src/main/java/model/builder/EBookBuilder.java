@@ -3,7 +3,6 @@ package model.builder;
 import model.EBook;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class EBookBuilder {
     private EBook ebook;
