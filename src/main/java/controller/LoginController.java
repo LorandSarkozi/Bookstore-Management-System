@@ -3,9 +3,11 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import model.User;
+import model.validator.Notification;
 import model.validator.UserValidator;
 import service.user.AuthenticationService;
 import view.LoginView;
+import view.MenuView;
 
 import java.util.EventListener;
 import java.util.List;
@@ -14,13 +16,11 @@ public class LoginController {
 
     private final LoginView loginView;
     private final AuthenticationService authenticationService;
-    private final UserValidator userValidator;
 
 
-    public LoginController(LoginView loginView, AuthenticationService authenticationService, UserValidator userValidator) {
+    public LoginController(LoginView loginView, AuthenticationService authenticationService) {
         this.loginView = loginView;
         this.authenticationService = authenticationService;
-        this.userValidator = userValidator;
 
         this.loginView.addLoginButtonListener(new LoginButtonListener());
         this.loginView.addRegisterButtonListener(new RegisterButtonListener());
@@ -33,12 +33,14 @@ public class LoginController {
             String username = loginView.getUsername();
             String password = loginView.getPassword();
 
-            User user = authenticationService.login(username, password);
+            Notification<User> loginNotification = authenticationService.login(username, password);
 
-            if (user == null){
-                loginView.setActionTargetText("Invalid Username or password!");
+            if (loginNotification.hasErrors()){
+                loginView.setActionTargetText(loginNotification.getFormattedErrors());
             }else{
                 loginView.setActionTargetText("LogIn Successfull!");
+
+
             }
 
         }
@@ -51,16 +53,12 @@ public class LoginController {
             String username = loginView.getUsername();
             String password = loginView.getPassword();
 
-            userValidator.validate(username, password);
-            final List<String> errors = userValidator.getErrors();
-            if (errors.isEmpty()) {
-                if (authenticationService.register(username, password)){
-                    loginView.setActionTargetText("Register successfull!");
-                }else{
-                    loginView.setActionTargetText("Register NOT successfull!");
-                }
+            Notification<Boolean> registerNotification = authenticationService.register(username, password);
+
+            if (registerNotification.hasErrors()) {
+                loginView.setActionTargetText(registerNotification.getFormattedErrors());
             } else {
-                loginView.setActionTargetText(userValidator.getFormattedErrors());
+                loginView.setActionTargetText("Register successful!");
             }
         }
     }

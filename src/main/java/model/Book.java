@@ -12,6 +12,7 @@ public class Book{
     private String author;
 
     private String title;
+    private int quantity;
 
     private LocalDate publishedDate;
 
@@ -37,6 +38,14 @@ public class Book{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getQuantity(){
+        return quantity;
+    }
+
+    public void setQuantity(int quantity){
+        this.quantity=quantity;
     }
 
     public LocalDate getPublishedDate() {

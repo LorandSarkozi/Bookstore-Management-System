@@ -26,6 +26,9 @@ public class LoginView {
     private Button logInButton;
     private Text actiontarget;
 
+
+
+
     public LoginView(Stage primaryStage) {
         primaryStage.setTitle("Book Store");
 
@@ -40,6 +43,7 @@ public class LoginView {
         initializeFields(gridPane);
 
         primaryStage.show();
+
     }
 
     private void initializeGridPane(GridPane gridPane){
@@ -93,13 +97,19 @@ public class LoginView {
         return passwordField.getText();
     }
 
+
+
     public void setActionTargetText(String text){ this.actiontarget.setText(text);}
 
     public void addLoginButtonListener(EventHandler<ActionEvent> loginButtonListener) {
         logInButton.setOnAction(loginButtonListener);
+
+
     }
 
     public void addRegisterButtonListener(EventHandler<ActionEvent> signInButtonListener) {
         signInButton.setOnAction(signInButtonListener);
     }
+
+
 }
