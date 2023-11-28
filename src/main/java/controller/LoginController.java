@@ -39,6 +39,7 @@ public class LoginController {
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
             }else{
                 loginView.setActionTargetText("LogIn Successfull!");
+                // primaryStage ?
 
 
             }
