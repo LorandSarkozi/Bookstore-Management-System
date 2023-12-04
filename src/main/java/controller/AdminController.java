@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import model.Book;
 import repository.book.BookRepository;
 import repository.book.BookRepositoryMySQL;
+import repository.security.RightsRolesRepository;
 import service.user.AuthenticationService;
 import view.AdminView;
 import view.LoginView;
@@ -29,10 +30,12 @@ public class AdminController {
     private BookRepository bookRepository;
 
     private Connection connection;
+    private final RightsRolesRepository rightsRolesRepository;
 
-    public AdminController(AdminView adminView,AuthenticationService authenticationService){
+    public AdminController(AdminView adminView,AuthenticationService authenticationService,RightsRolesRepository rightsRolesRepository){
         this.authenticationService=authenticationService;
         this.adminView=adminView;
+        this.rightsRolesRepository = rightsRolesRepository;
         this.adminView.addUserViewButtonListener(new AdminController.UserViewListener());
         this.adminView.addBookViewButtonListener(new AdminController.UserViewListener());
         this.adminView.addLogOutButtonListener(new AdminController.LogOutButtonListener());
@@ -45,7 +48,8 @@ public class AdminController {
         public void handle(javafx.event.ActionEvent event) {
             adminView.getWindow().close();
             LoginView loginView = new LoginView(new Stage());
-            LoginController controller = new LoginController(loginView, authenticationService);
+            RightsRolesRepository rightRolesRepository = rightsRolesRepository;
+            LoginController controller = new LoginController(loginView, authenticationService,rightRolesRepository);
 
         }
     }

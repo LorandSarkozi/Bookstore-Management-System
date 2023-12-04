@@ -37,7 +37,7 @@ public class ComponentFactory {
         this.userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
         this.authenticationService = new AuthenticationServiceImpl(userRepository, rightsRolesRepository);
         this.loginView = new LoginView(stage);
-        this.loginController = new LoginController(loginView, authenticationService);
+        this.loginController = new LoginController(loginView, authenticationService,rightsRolesRepository);
         this.bookRepository = new BookRepositoryMySQL(connection);
     }
 

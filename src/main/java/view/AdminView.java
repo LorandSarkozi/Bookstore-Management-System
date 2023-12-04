@@ -89,13 +89,13 @@ public class AdminView {
         HBox logOutButtonHBox = new HBox(10);
         logOutButtonHBox.setAlignment(Pos.BOTTOM_LEFT);
         logOutButtonHBox.getChildren().add(logOutButton);
-        gridPane.add(logOutButtonHBox, 0, 4);
+        gridPane.add(logOutButtonHBox, 0, 3);
 
         userViewButton = new Button("View User");
         HBox userViewButtonHBox = new HBox(10);
         userViewButtonHBox.setAlignment(Pos.BOTTOM_CENTER);
         userViewButtonHBox.getChildren().add(userViewButton);
-        gridPane.add(userViewButtonHBox, 0, 3);
+        gridPane.add(userViewButtonHBox, 0, 4);
 
         bookViewButton = new Button("View Book");
         HBox bookViewButtonHBox = new HBox(10);
