@@ -68,20 +68,20 @@ public class LoginController {
                     }
                 }*/
 
-                /*CustomerView customerView = new CustomerView(new Stage());
+                CustomerView customerView = new CustomerView(new Stage());
                 CustomerController controller = new CustomerController(customerView, authenticationService,rightsRolesRepository);
                 loginView.setActionTargetText("Login successful!");
-                loginView.getWindow().close();*/
+                loginView.getWindow().close();
 
                 /*AdminView adminView = new AdminView(new Stage());
                 AdminController controller = new AdminController(adminView, authenticationService,rightsRolesRepository);
                 loginView.setActionTargetText("Admin login successful!");
                 loginView.getWindow().close();*/
 
-                EmployeeView employeeView = new EmployeeView(new Stage());
+                /*EmployeeView employeeView = new EmployeeView(new Stage());
                 EmployeeController controller = new EmployeeController(employeeView, authenticationService,rightsRolesRepository);
                 loginView.setActionTargetText("Employee login successful!");
-                loginView.getWindow().close();
+                loginView.getWindow().close();*/
             }
         }
     }
