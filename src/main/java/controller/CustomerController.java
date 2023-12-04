@@ -58,7 +58,7 @@ public class CustomerController {
 
                 if (result.isPresent() && result.get() == ButtonType.OK) {
 
-                    int newQuantity = selectedBook.getQuantity();
+                    int newQuantity = selectedBook.getQuantity() ;
                     selectedBook.setQuantity(newQuantity);
                     bookRepository.updateBookQuantity(selectedBook);
 

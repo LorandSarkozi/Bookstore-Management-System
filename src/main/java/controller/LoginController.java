@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 import model.User;
 import model.validator.Notification;
 import service.user.AuthenticationService;
+import view.AdminView;
+import view.EmployeeView;
 import view.LoginView;
 import view.CustomerView;
 
@@ -32,13 +34,29 @@ public class LoginController {
 
             Notification<User> loginNotification = authenticationService.login(username, password);
 
-            if (loginNotification.hasErrors()){
+            if (loginNotification.hasErrors()) {
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
-            }else{
+            } else {
                 loginView.setActionTargetText("LogIn Successful!");
                 loginView.getWindow().close();
-                CustomerView customerView = new CustomerView(new Stage());
-                CustomerController controller = new CustomerController(customerView, authenticationService);
+                
+                //if() {
+
+                /*CustomerView customerView = new CustomerView(new Stage());
+                CustomerController controller = new CustomerController(customerView, authenticationService);*/
+
+                // }else if() {
+
+                AdminView adminView = new AdminView(new Stage());
+                AdminController controller = new AdminController(adminView,authenticationService);
+
+                //}else{
+
+                /*EmployeeView employeeView = new EmployeeView(new Stage());
+                EmployeeController controller = new EmployeeController(employeeView,authenticationService);*/
+
+
+                //}
 
                 //loginView.addLoginButtonListener();
                 // primaryStage ?
