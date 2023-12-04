@@ -14,7 +14,11 @@ public class Book{
     private String title;
     private int quantity;
 
+    private float price;
+
     private LocalDate publishedDate;
+
+
 
     public Long getId() {
         return id;
@@ -56,8 +60,16 @@ public class Book{
         this.publishedDate = publishedDate;
     }
 
+    public float getPrice(){
+        return this.price;
+    }
+
+    public void setPrice(float price){
+        this.price=price;
+    }
+
     @Override
     public String toString(){
-        return String.format("Book author: %s | title: %s | Published Date: %s.", author, title, publishedDate);
+        return String.format("Book author: %s | title: %s | Published Date: %s | Quantity: %d | Price: %f", author, title, publishedDate,quantity,price);
     }
 }

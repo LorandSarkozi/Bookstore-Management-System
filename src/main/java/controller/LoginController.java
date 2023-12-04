@@ -2,15 +2,12 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.stage.Stage;
 import model.User;
 import model.validator.Notification;
-import model.validator.UserValidator;
 import service.user.AuthenticationService;
 import view.LoginView;
-import view.MenuView;
-
-import java.util.EventListener;
-import java.util.List;
+import view.CustomerView;
 
 public class LoginController {
 
@@ -38,7 +35,12 @@ public class LoginController {
             if (loginNotification.hasErrors()){
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
             }else{
-                loginView.setActionTargetText("LogIn Successfull!");
+                loginView.setActionTargetText("LogIn Successful!");
+                loginView.getWindow().close();
+                CustomerView customerView = new CustomerView(new Stage());
+                CustomerController controller = new CustomerController(customerView, authenticationService);
+
+                //loginView.addLoginButtonListener();
                 // primaryStage ?
 
 

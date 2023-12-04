@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Collections;
 
-import static database.Constants.Roles.CUSTOMER;
+import static database.Constants.Roles.*;
 
 public class AuthenticationServiceImpl implements AuthenticationService {
 

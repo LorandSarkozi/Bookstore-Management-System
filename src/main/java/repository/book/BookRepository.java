@@ -14,4 +14,6 @@ public interface BookRepository {
     boolean save(Book book);
 
     void removeAll();
+
+    void updateBookQuantity(Book book);
 }

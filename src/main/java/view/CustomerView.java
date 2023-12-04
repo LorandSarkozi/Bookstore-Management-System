@@ -11,25 +11,38 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Book;
-import repository.book.BookRepository;
+import repository.book.BookRepositoryMySQL;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 
-public class MenuView {
+public class CustomerView {
 
     private TableView<Book> table;
     private Button buyButton;
     private Button logOutButton;
 
-    private Book book;
 
-    public MenuView(Stage primaryStage){
+    private Stage window;
+
+
+    private BookRepositoryMySQL bookRepository;
+
+    public CustomerView(Stage primaryStage){
+
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","Timea.25");
+            bookRepository = new BookRepositoryMySQL(connection);
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        window = primaryStage;
+
         primaryStage.setTitle("Customer Menu");
 
         GridPane gridPane = new GridPane();
@@ -48,16 +61,19 @@ public class MenuView {
         TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
         TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
         TableColumn<Book, Integer> quantityColumn = new TableColumn<>("Quantity");
+        TableColumn<Book, Float> priceColumn = new TableColumn<>("Price");
         authorColumn.setMinWidth(200);
         titleColumn.setMinWidth(200);
         quantityColumn.setMinWidth(100);
+        priceColumn.setMinWidth(100);
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         table = new TableView<>();
-        table.setItems(table.getBook());
-        table.getColumns().addAll(authorColumn,titleColumn,quantityColumn);
+        table.setItems(getBook());
+        table.getColumns().addAll(authorColumn,titleColumn,quantityColumn,priceColumn);
 
         gridPane.add(table,0,1);
 
@@ -76,6 +92,10 @@ public class MenuView {
 
     }
 
+    public TableView<Book> getTableView(){
+        return this.table;
+    }
+
 
     private void initializeGridPane(GridPane gridPane) {
         gridPane.setAlignment(Pos.CENTER);
@@ -85,10 +105,13 @@ public class MenuView {
     }
 
     public ObservableList<Book> getBook(){
-        ObservableList<Book> books = FXCollections.observableArrayList();
-        books.addAll();
 
-        return books;
+        List<Book> book=bookRepository.findAll();
+        return FXCollections.observableArrayList(book);
+    }
+
+    public Stage getWindow(){
+        return this.window;
     }
 
     public void addLogOutButtonListener(EventHandler<ActionEvent> logoutButtonListener) {
@@ -100,5 +123,9 @@ public class MenuView {
     public void addBuyButtonListener(EventHandler<ActionEvent> buyButtonListener) {
         buyButton.setOnAction(buyButtonListener);
     }
+
+
+
+
 
 }

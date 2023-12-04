@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class BookRepositoryMySQL implements BookRepository{
-    private final Connection connection;
+    private Connection connection;
 
     public BookRepositoryMySQL(Connection connection){
         this.connection = connection;
@@ -32,8 +32,6 @@ public class BookRepositoryMySQL implements BookRepository{
         } catch (SQLException e){
             e.printStackTrace();
         }
-
-
         return books;
     }
 
@@ -77,7 +75,7 @@ public class BookRepositoryMySQL implements BookRepository{
 
     @Override
     public boolean save(Book book) {
-        String sql = "INSERT INTO book VALUES(null, ?, ?, ?);";
+        String sql = "INSERT INTO book VALUES(null, ?, ?, ?,?,?);";
 
 //        String newSql = "INSERT INTO book VALUES(null, \'" + book.getAuthor() +"\', \'"+ book.getTitle()+"\', null );";
 
@@ -94,6 +92,8 @@ public class BookRepositoryMySQL implements BookRepository{
             preparedStatement.setString(1, book.getAuthor());
             preparedStatement.setString(2, book.getTitle());
             preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
+            preparedStatement.setInt(4,book.getQuantity());
+            preparedStatement.setFloat(5,book.getPrice());
 
             int rowsInserted = preparedStatement.executeUpdate();
 
@@ -125,6 +125,28 @@ public class BookRepositoryMySQL implements BookRepository{
                 .setAuthor(resultSet.getString("author"))
                 .setTitle(resultSet.getString("title"))
                 .setPublishedDate(new java.sql.Date((resultSet.getDate("publishedDate")).getTime()).toLocalDate())
+                .setQuantity(resultSet.getInt("quantity"))
+                .setPrice(resultSet.getFloat("price"))
                 .build();
+    }
+
+    public void updateBookQuantity(Book book) {
+        int newQuantity = book.getQuantity() - 1;
+
+        try  {
+            String sql = "UPDATE book SET quantity = ? WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, newQuantity);
+            statement.setLong(2, book.getId());
+
+            int rowsUpdated = statement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                book.setQuantity(newQuantity);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
     }
 }

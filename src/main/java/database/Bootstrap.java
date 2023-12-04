@@ -1,5 +1,6 @@
 package database;
 
+import model.builder.BookBuilder;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 
@@ -27,6 +28,7 @@ public class Bootstrap {
         bootstrapTables();
 
         bootstrapUserData();
+
     }
 
     private static void dropAll() throws SQLException {
@@ -37,6 +39,8 @@ public class Bootstrap {
             Statement statement = connection.createStatement();
 
             String[] dropStatements = {
+                    "TRUNCATE `bought_books`;",
+                    "DROP TABLE `bought_books`;",
                     "TRUNCATE `role_right`;",
                     "DROP TABLE `role_right`;",
                     "TRUNCATE `right`;",
