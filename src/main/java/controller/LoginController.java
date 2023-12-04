@@ -15,6 +15,8 @@ import view.CustomerView;
 
 import java.util.List;
 
+import static database.Constants.Roles.*;
+
 public class LoginController {
 
     private final LoginView loginView;
@@ -40,48 +42,29 @@ public class LoginController {
             if (loginNotification.hasErrors()) {
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
             } else {
-               /* User loggedInUser = loginNotification.getResult();
-                if (loggedInUser != null) {
-                    List<Role> userRoles = rightsRolesRepository.findRolesForUser(loggedInUser.getId());
-                    if (userRoles != null && !userRoles.isEmpty()) {
-                        for (Role role : userRoles) {
-                            if ("ADMINISTRATOR".equals(role.getRole())) {
-                                AdminView adminView = new AdminView(new Stage());
-                                AdminController controller = new AdminController(adminView, authenticationService,rightsRolesRepository);
-                                loginView.setActionTargetText("Admin login successful!");
-                                loginView.getWindow().close();
-                                break;
-                            } else if ("EMPLOYEE".equals(role.getRole())) {
-                                EmployeeView employeeView = new EmployeeView(new Stage());
-                                EmployeeController controller = new EmployeeController(employeeView, authenticationService,rightsRolesRepository);
-                                loginView.setActionTargetText("Employee login successful!");
-                                loginView.getWindow().close();
-                                break;
-                            } else if("CUSTOMER".equals(role.getRole())) {
-                                CustomerView customerView = new CustomerView(new Stage());
-                                CustomerController controller = new CustomerController(customerView, authenticationService,rightsRolesRepository);
-                                loginView.setActionTargetText("Login successful!");
-                                loginView.getWindow().close();
-                                break;
-                            }
-                        }
-                    }
-                }*/
-
-                CustomerView customerView = new CustomerView(new Stage());
-                CustomerController controller = new CustomerController(customerView, authenticationService,rightsRolesRepository);
                 loginView.setActionTargetText("Login successful!");
                 loginView.getWindow().close();
+                User loggedInUser = loginNotification.getResult();
+                List<Role> userRoles = loggedInUser.getRoles();
+                String role = userRoles.get(0).getRole();
+                switch (role){
+                    case ADMINISTRATOR: {
+                        AdminView adminView = new AdminView(new Stage());
+                        AdminController controller = new AdminController(adminView, authenticationService,rightsRolesRepository);
+                        break;
+                    }
+                    case EMPLOYEE: {
+                        EmployeeView employeeView = new EmployeeView(new Stage());
+                        EmployeeController controller = new EmployeeController(employeeView, authenticationService,rightsRolesRepository);
+                        break;
+                    }
+                    case CUSTOMER: {
+                        CustomerView customerView = new CustomerView(new Stage());
+                        CustomerController controller = new CustomerController(customerView, authenticationService,rightsRolesRepository);
+                        break;
+                    }
+                }
 
-                /*AdminView adminView = new AdminView(new Stage());
-                AdminController controller = new AdminController(adminView, authenticationService,rightsRolesRepository);
-                loginView.setActionTargetText("Admin login successful!");
-                loginView.getWindow().close();*/
-
-                /*EmployeeView employeeView = new EmployeeView(new Stage());
-                EmployeeController controller = new EmployeeController(employeeView, authenticationService,rightsRolesRepository);
-                loginView.setActionTargetText("Employee login successful!");
-                loginView.getWindow().close();*/
             }
         }
     }
