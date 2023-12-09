@@ -149,4 +149,24 @@ public class BookRepositoryMySQL implements BookRepository{
 
         }
     }
+
+    public boolean deleteBookById(Long id){
+        try {
+            String sql = "DELETE FROM book WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+
+            int rowsDeleted = statement.executeUpdate();
+
+            return (rowsDeleted == 1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
+
+
 }

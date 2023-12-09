@@ -16,4 +16,5 @@ public interface BookRepository {
     void removeAll();
 
     void updateBookQuantity(Book book);
+    boolean deleteBookById(Long id);
 }

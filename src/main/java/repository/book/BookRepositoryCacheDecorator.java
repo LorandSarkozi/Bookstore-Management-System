@@ -45,5 +45,17 @@ public class BookRepositoryCacheDecorator extends BookRepositoryDecorator{
 
     }
 
+    @Override
+    public boolean deleteBookById(Long id) {
+        boolean isDeleted = decoratedRepository.deleteBookById(id);
+
+        if (isDeleted) {
+            cache.invalidateCache();
+            return true;
+        }
+        return false;
+    }
+
+
 
 }

@@ -1,5 +1,6 @@
 package view;
 
+import com.mysql.cj.xdevapi.Table;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -66,7 +67,7 @@ public class EmployeeView {
         GridPane gridPane = new GridPane();
         initializeGridPane(gridPane);
 
-        Scene scene = new Scene(gridPane, 1024, 680);
+        Scene scene = new Scene(gridPane, 1324, 680);
         primaryStage.setScene(scene);
 
         initializeFields(gridPane);
@@ -75,17 +76,19 @@ public class EmployeeView {
     }
 
     private void initializeFields(GridPane gridPane) {
-
+        TableColumn<Book,Long> idColumn = new TableColumn<>("Id");
         TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
         TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
         TableColumn<Book, Integer> quantityColumn = new TableColumn<>("Quantity");
         TableColumn<Book, Float> priceColumn = new TableColumn<>("Price");
 
+        idColumn.setMinWidth(50);
         authorColumn.setMinWidth(200);
         titleColumn.setMinWidth(200);
         quantityColumn.setMinWidth(100);
         priceColumn.setMinWidth(100);
 
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
@@ -93,7 +96,7 @@ public class EmployeeView {
 
         table = new TableView<>();
         table.setItems(getBook());
-        table.getColumns().addAll(authorColumn,titleColumn,quantityColumn,priceColumn);
+        table.getColumns().addAll(idColumn,authorColumn,titleColumn,quantityColumn,priceColumn);
 
         gridPane.add(new Label("Author:"), 0, 0);
         gridPane.add(authorField, 0, 1);
@@ -110,7 +113,6 @@ public class EmployeeView {
         gridPane.add(new Label("Price:"), 4, 0);
         gridPane.add(priceField, 4, 1);
 
-        gridPane.add(idField, 1, 4);
 
         gridPane.add(table,5,6);
 
@@ -136,13 +138,13 @@ public class EmployeeView {
         HBox updateButtonHBox = new HBox(20);
         updateButtonHBox.setAlignment(Pos.BOTTOM_LEFT);
         updateButtonHBox.getChildren().add(updateButton);
-        gridPane.add(updateButtonHBox, 0, 4);
+        gridPane.add(updateButtonHBox, 1, 4);
 
         deleteButton = new Button("  Delete  ");
         HBox deleteButtonHBox = new HBox(20);
         deleteButtonHBox.setAlignment(Pos.BOTTOM_LEFT);
         deleteButtonHBox.getChildren().add(deleteButton);
-        gridPane.add(deleteButtonHBox, 0, 5);
+        gridPane.add(deleteButtonHBox, 0, 4);
 
 
 
@@ -180,6 +182,14 @@ public class EmployeeView {
         createButton.setOnAction(createButtonListener);
     }
 
+    public void addUpdateButtonListener(EventHandler<ActionEvent> updateButtonListener) {
+        updateButton.setOnAction(updateButtonListener);
+    }
+
+    public void addDeleteButtonListener(EventHandler<ActionEvent> deleteButtonListener) {
+        deleteButton.setOnAction(deleteButtonListener);
+    }
+
     public Book getBookDetails() {
         String author = authorField.getText();
         String title = titleField.getText();
@@ -195,6 +205,19 @@ public class EmployeeView {
                 .setPrice(price)
                 .build();
     }
+
+    public void setBookDetails(Book book){
+        authorField.setText(book.getAuthor());
+        titleField.setText(book.getTitle());
+        publishedDateField.setValue(book.getPublishedDate());
+        quantityField.setText(Integer.toString(book.getQuantity()));
+        priceField.setText(String.valueOf(book.getPrice()));
+    }
+
+    public Long getIdField(){
+        return Long.parseLong(idField.getText());
+    }
+
 
     public void clearFields() {
         authorField.clear();

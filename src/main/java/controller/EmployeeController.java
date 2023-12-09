@@ -40,6 +40,8 @@ public class EmployeeController {
         this.employeeView = customerView;
         this.employeeView.addCreateButtonListener(new EmployeeController.CreateButtonListener());
         this.employeeView.addLogOutButtonListener(new EmployeeController.LogOutButtonListener());
+        this.employeeView.addUpdateButtonListener(new EmployeeController.UpdateButtonListener());
+        this.employeeView.addDeleteButtonListener(new EmployeeController.DeleteButtonListener());
         try{
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","Timea.25");
             bookRepository = new BookRepositoryMySQL(connection);
@@ -59,10 +61,40 @@ public class EmployeeController {
         }
     }
 
+    private class UpdateButtonListener implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(javafx.event.ActionEvent event){
+            Book selectedBook = employeeView.getTableView().getSelectionModel().getSelectedItem();
+
+            if (selectedBook != null) {
+                Book updatedBook = employeeView.getBookDetails();
+
+                selectedBook.setAuthor(updatedBook.getAuthor());
+                selectedBook.setTitle(updatedBook.getTitle());
+                selectedBook.setPublishedDate(updatedBook.getPublishedDate());
+                selectedBook.setQuantity(updatedBook.getQuantity());
+                selectedBook.setPrice(updatedBook.getPrice());
+
+                employeeView.getTableView().refresh();
+
+                employeeView.clearFields();
+            } else {
+
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText(null);
+                errorAlert.setContentText("Please select a book to update!");
+                errorAlert.showAndWait();
+            }
+        }
+    }
+
+
+
     private class CreateButtonListener implements EventHandler<ActionEvent> {
 
         @Override
-        public void handle(ActionEvent event) {
+        public void handle(javafx.event.ActionEvent event) {
 
             Book newBook = employeeView.getBookDetails();
 
@@ -89,5 +121,41 @@ public class EmployeeController {
             }
         }
     }
+
+    private class DeleteButtonListener implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+            Book selectedBook = employeeView.getTableView().getSelectionModel().getSelectedItem();
+
+            if (selectedBook != null) {
+                boolean isBookDeleted = bookRepository.deleteBookById(selectedBook.getId());
+
+                if (isBookDeleted) {
+                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                    successAlert.setTitle("Success");
+                    successAlert.setHeaderText(null);
+                    successAlert.setContentText("Book deleted successfully!");
+                    successAlert.showAndWait();
+
+                    employeeView.getTableView().getItems().remove(selectedBook);
+                    employeeView.clearFields();
+                    employeeView.getTableView().refresh();
+                } else {
+                    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                    errorAlert.setTitle("Error");
+                    errorAlert.setHeaderText(null);
+                    errorAlert.setContentText("Failed to delete the book!");
+                    errorAlert.showAndWait();
+                }
+            } else {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText(null);
+                errorAlert.setContentText("Please select a book to delete!");
+                errorAlert.showAndWait();
+            }
+        }
+    }
+
 
 }
