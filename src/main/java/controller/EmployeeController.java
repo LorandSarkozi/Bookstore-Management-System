@@ -3,10 +3,12 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import model.Book;
+import model.builder.BookBuilder;
 import repository.book.BookRepository;
 import repository.book.BookRepositoryMySQL;
 import repository.security.RightsRolesRepository;
@@ -60,9 +62,32 @@ public class EmployeeController {
     private class CreateButtonListener implements EventHandler<ActionEvent> {
 
         @Override
-        public void handle(javafx.event.ActionEvent event) {
+        public void handle(ActionEvent event) {
 
+            Book newBook = employeeView.getBookDetails();
+
+            boolean isBookSaved = bookRepository.save(newBook);
+
+
+            if (isBookSaved) {
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Success");
+                successAlert.setHeaderText(null);
+                successAlert.setContentText("Book saved successfully!");
+                successAlert.showAndWait();
+
+                employeeView.clearFields();
+
+                employeeView.getTableView().getItems().add(newBook);
+                employeeView.getTableView().refresh();
+            } else {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText(null);
+                errorAlert.setContentText("Failed to save the book!");
+                errorAlert.showAndWait();
+            }
         }
-
     }
+
 }

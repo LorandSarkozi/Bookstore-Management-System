@@ -71,7 +71,7 @@ public class SQLTableCreationFactory {
                     "    REFERENCES role (id)" +
                     "    ON DELETE CASCADE" +
                     "    ON UPDATE CASCADE);";
-            case BOUGHT_BOOKS -> "\tCREATE TABLE IF NOT EXISTS bought_books(" +
+            case BOUGHT_BOOKS -> "\tCREATE TABLE IF NOT EXISTS bought_books (" +
                     "  id INT NOT NULL AUTO_INCREMENT," +
                     "  user_id INT NOT NULL," +
                     "  book_id INT NOT NULL," +

@@ -102,7 +102,7 @@ public class JDBConnectionWrapper {
     public void insertTablesBook() throws SQLException{
         Statement statement = connection.createStatement();
 
-        String sql= "INSERT INTO book values(null,'Caragiale','Adsadasd','1940-06-10',100,27);";
+        String sql= "INSERT INTO book values(null,'Eminescu','uewiywero','1930-06-10',70,30);";
 
         statement.execute(sql);
     }

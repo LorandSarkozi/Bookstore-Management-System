@@ -13,20 +13,33 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import model.Book;
+import model.builder.BookBuilder;
 import repository.book.BookRepositoryMySQL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class EmployeeView {
 
     private TableView<Book> table;
     private Button createButton;
+    private Button sellButton;
+    private Button updateButton;
     private Button logOutButton;
+    private Button deleteButton;
+
 
     private BookRepositoryMySQL bookRepository;
+    private final TextField idField;
+
+    private final TextField authorField;
+    private final TextField titleField;
+    private final DatePicker publishedDateField;
+    private final TextField quantityField;
+    private final TextField priceField;
 
     private Stage window;
 
@@ -41,12 +54,19 @@ public class EmployeeView {
 
         window = primaryStage;
 
+        this.idField = new TextField();
+        this.authorField = new TextField();
+        this.titleField = new TextField();
+        this.publishedDateField = new DatePicker();
+        this.quantityField = new TextField();
+        this.priceField = new TextField();
+
         primaryStage.setTitle("Employee Menu");
 
         GridPane gridPane = new GridPane();
         initializeGridPane(gridPane);
 
-        Scene scene = new Scene(gridPane, 720, 480);
+        Scene scene = new Scene(gridPane, 1024, 680);
         primaryStage.setScene(scene);
 
         initializeFields(gridPane);
@@ -55,14 +75,17 @@ public class EmployeeView {
     }
 
     private void initializeFields(GridPane gridPane) {
+
         TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
         TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
         TableColumn<Book, Integer> quantityColumn = new TableColumn<>("Quantity");
         TableColumn<Book, Float> priceColumn = new TableColumn<>("Price");
+
         authorColumn.setMinWidth(200);
         titleColumn.setMinWidth(200);
         quantityColumn.setMinWidth(100);
         priceColumn.setMinWidth(100);
+
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
@@ -72,19 +95,55 @@ public class EmployeeView {
         table.setItems(getBook());
         table.getColumns().addAll(authorColumn,titleColumn,quantityColumn,priceColumn);
 
-        gridPane.add(table,0,1);
+        gridPane.add(new Label("Author:"), 0, 0);
+        gridPane.add(authorField, 0, 1);
 
-        createButton = new Button("Create");
-        HBox buyButtonHBox = new HBox(10);
-        buyButtonHBox.setAlignment(Pos.BOTTOM_RIGHT);
-        buyButtonHBox.getChildren().add(createButton);
-        gridPane.add(buyButtonHBox, 1, 3);
+        gridPane.add(new Label("Title:"), 1, 0);
+        gridPane.add(titleField, 1, 1);
+
+        gridPane.add(new Label("Published Date:"), 2, 0);
+        gridPane.add(publishedDateField, 2, 1);
+
+        gridPane.add(new Label("Quantity:"), 3, 0);
+        gridPane.add(quantityField, 3, 1);
+
+        gridPane.add(new Label("Price:"), 4, 0);
+        gridPane.add(priceField, 4, 1);
+
+        gridPane.add(idField, 1, 4);
+
+        gridPane.add(table,5,6);
+
+        createButton = new Button("  Create  ");
+        HBox createButtonHBox = new HBox(20);
+        createButtonHBox.setAlignment(Pos.BOTTOM_LEFT);
+        createButtonHBox.getChildren().add(createButton);
+        gridPane.add(createButtonHBox, 0, 3);
 
         logOutButton = new Button("Log Out");
-        HBox logOutButtonHBox = new HBox(10);
-        logOutButtonHBox.setAlignment(Pos.BOTTOM_LEFT);
+        HBox logOutButtonHBox = new HBox(20);
+        logOutButtonHBox.setAlignment(Pos.BOTTOM_RIGHT);
         logOutButtonHBox.getChildren().add(logOutButton);
-        gridPane.add(logOutButtonHBox, 0, 3);
+        gridPane.add(logOutButtonHBox, 5, 9);
+
+        sellButton = new Button("  Sell  ");
+        HBox sellButtonHBox = new HBox(20);
+        sellButtonHBox.setAlignment(Pos.BOTTOM_LEFT);
+        sellButtonHBox.getChildren().add(sellButton);
+        gridPane.add(sellButtonHBox, 1, 3);
+
+        updateButton = new Button("  Update  ");
+        HBox updateButtonHBox = new HBox(20);
+        updateButtonHBox.setAlignment(Pos.BOTTOM_LEFT);
+        updateButtonHBox.getChildren().add(updateButton);
+        gridPane.add(updateButtonHBox, 0, 4);
+
+        deleteButton = new Button("  Delete  ");
+        HBox deleteButtonHBox = new HBox(20);
+        deleteButtonHBox.setAlignment(Pos.BOTTOM_LEFT);
+        deleteButtonHBox.getChildren().add(deleteButton);
+        gridPane.add(deleteButtonHBox, 0, 5);
+
 
 
     }
@@ -119,5 +178,30 @@ public class EmployeeView {
 
     public void addCreateButtonListener(EventHandler<ActionEvent> createButtonListener) {
         createButton.setOnAction(createButtonListener);
+    }
+
+    public Book getBookDetails() {
+        String author = authorField.getText();
+        String title = titleField.getText();
+        LocalDate publishedDate = publishedDateField.getValue();
+        int quantity = Integer.parseInt(quantityField.getText());
+        float price = Float.parseFloat(priceField.getText());
+
+        return new BookBuilder()
+                .setAuthor(author)
+                .setTitle(title)
+                .setPublishedDate(publishedDate)
+                .setQuantity(quantity)
+                .setPrice(price)
+                .build();
+    }
+
+    public void clearFields() {
+        authorField.clear();
+        titleField.clear();
+        publishedDateField.setValue(null);
+        quantityField.clear();
+        priceField.clear();
+
     }
 }
