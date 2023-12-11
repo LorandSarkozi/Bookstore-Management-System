@@ -80,9 +80,6 @@ public class BookRepositoryMySQL implements BookRepository{
 //        String newSql = "INSERT INTO book VALUES(null, \'" + book.getAuthor() +"\', \'"+ book.getTitle()+"\', null );";
 
 
-
-
-
         try{
 //            Statement statement = connection.createStatement();
 //            statement.executeUpdate(newSql);
