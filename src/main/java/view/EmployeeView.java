@@ -41,6 +41,8 @@ public class EmployeeView {
     private final TextField quantityField;
     private final TextField priceField;
 
+    private final TextField emailField;
+
     private Stage window;
 
     public EmployeeView(Stage primaryStage){
@@ -60,6 +62,7 @@ public class EmployeeView {
         this.publishedDateField = new DatePicker();
         this.quantityField = new TextField();
         this.priceField = new TextField();
+        this.emailField = new TextField();
 
         primaryStage.setTitle("Employee Menu");
 
@@ -112,6 +115,8 @@ public class EmployeeView {
         gridPane.add(new Label("Price:"), 4, 0);
         gridPane.add(priceField, 4, 1);
 
+        gridPane.add(emailField,2,3);
+
 
 
         gridPane.add(table,5,6);
@@ -158,6 +163,10 @@ public class EmployeeView {
         return this.window;
     }
 
+    public String getEmail(){
+        return emailField.getText();
+    }
+
 
     private void initializeGridPane(GridPane gridPane) {
         gridPane.setAlignment(Pos.CENTER);
@@ -188,6 +197,10 @@ public class EmployeeView {
 
     public void addDeleteButtonListener(EventHandler<ActionEvent> deleteButtonListener) {
         deleteButton.setOnAction(deleteButtonListener);
+    }
+
+    public void addSellButtonListener(EventHandler<ActionEvent> sellButtonListener) {
+        sellButton.setOnAction(sellButtonListener);
     }
 
     public Book getBookDetails() {

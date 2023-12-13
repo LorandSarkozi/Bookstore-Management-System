@@ -55,7 +55,7 @@ public class LoginController {
                     }
                     case EMPLOYEE: {
                         EmployeeView employeeView = new EmployeeView(new Stage());
-                        EmployeeController controller = new EmployeeController(employeeView, authenticationService,rightsRolesRepository);
+                        EmployeeController controller = new EmployeeController(loginView,employeeView, authenticationService,rightsRolesRepository);
                         break;
                     }
                     case CUSTOMER: {

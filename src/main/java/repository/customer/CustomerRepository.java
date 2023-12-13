@@ -5,8 +5,6 @@ import model.User;
 
 public interface CustomerRepository {
 
-    public void buyBook(Book book, User user);
-
-
+    public void buyBook( User epmployee , User user , Book book);
 
 }

@@ -8,10 +8,15 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import model.Book;
+import model.User;
 import model.builder.BookBuilder;
 import repository.book.BookRepository;
 import repository.book.BookRepositoryMySQL;
+import repository.customer.CustomerRepository;
+import repository.customer.CustomerRepositoryMySQL;
 import repository.security.RightsRolesRepository;
+import repository.user.UserRepository;
+import repository.user.UserRepositoryMySQL;
 import service.user.AuthenticationService;
 import view.EmployeeView;
 import view.LoginView;
@@ -29,22 +34,30 @@ public class EmployeeController {
 
     private final EmployeeView employeeView;
 
+    private final LoginView loginView;
+
     private BookRepository bookRepository;
+    private UserRepository userRepository;
+    private CustomerRepository customerRepository;
 
     private Connection connection;
     private final RightsRolesRepository rightRolesRepository;
 
-    public EmployeeController(EmployeeView customerView, AuthenticationService authenticationService,RightsRolesRepository rightsRolesRepository) {
+    public EmployeeController(LoginView loginView,EmployeeView customerView, AuthenticationService authenticationService,RightsRolesRepository rightsRolesRepository) {
         this.authenticationService = authenticationService;
         this.rightRolesRepository = rightsRolesRepository;
         this.employeeView = customerView;
+        this.loginView = loginView;
         this.employeeView.addCreateButtonListener(new EmployeeController.CreateButtonListener());
         this.employeeView.addLogOutButtonListener(new EmployeeController.LogOutButtonListener());
         this.employeeView.addUpdateButtonListener(new EmployeeController.UpdateButtonListener());
         this.employeeView.addDeleteButtonListener(new EmployeeController.DeleteButtonListener());
+        this.employeeView.addSellButtonListener(new EmployeeController.SellButtonListener());
         try{
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","Timea.25");
             bookRepository = new BookRepositoryMySQL(connection);
+            userRepository = new UserRepositoryMySQL(connection,rightsRolesRepository);
+            customerRepository = new CustomerRepositoryMySQL(connection);
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -158,6 +171,50 @@ public class EmployeeController {
             }
         }
     }
+
+    private class SellButtonListener implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+
+            User employee = userRepository.findUserByUsername(loginView.getUsername());
+            User customer = userRepository.findUserByUsername(employeeView.getEmail());
+            Book selectedBook = employeeView.getTableView().getSelectionModel().getSelectedItem();
+            customerRepository.buyBook(employee,customer,selectedBook);
+
+
+            if (selectedBook != null && selectedBook.getQuantity() > 0) {
+                Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmation.setTitle("Confirm ");
+                confirmation.setHeaderText(null);
+                confirmation.setContentText("Do you want to sell the selected book?");
+                Optional<ButtonType> result = confirmation.showAndWait();
+
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+
+                    int newQuantity = selectedBook.getQuantity() ;
+                    selectedBook.setQuantity(newQuantity);
+                    bookRepository.updateBookQuantity(selectedBook);
+
+                    Alert success = new Alert(Alert.AlertType.INFORMATION);
+                    success.setTitle("Success");
+                    success.setHeaderText(null);
+                    success.setContentText("Book sold successfully!");
+                    success.showAndWait();
+                    employeeView.getTableView().refresh();
+                }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning");
+                alert.setHeaderText(null);
+                alert.setContentText("Please select a book with available quantity!");
+                alert.showAndWait();
+            }
+
+
+        }
+    }
+
+
 
 
 }

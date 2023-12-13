@@ -178,6 +178,25 @@ public class UserRepositoryMySQL implements UserRepository {
         }
     }
 
+    public User findUserByUsername(String username) {
+        try {
+            String sql = "SELECT * FROM user WHERE username = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                User user = getUserFromResultSet(resultSet);
+                return user;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 
 }

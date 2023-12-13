@@ -20,4 +20,6 @@ public interface UserRepository {
     boolean deleteUserById(Long id);
 
     boolean updateUser(User user);
+
+    User findUserByUsername(String username);
 }

@@ -73,9 +73,15 @@ public class SQLTableCreationFactory {
                     "    ON UPDATE CASCADE);";
             case BOUGHT_BOOKS -> "\tCREATE TABLE IF NOT EXISTS bought_books (" +
                     "  id INT NOT NULL AUTO_INCREMENT," +
+                    "  employee_id INT NOT NULL," +
                     "  user_id INT NOT NULL," +
                     "  book_id INT NOT NULL," +
                     "  PRIMARY KEY (id)," +
+                    "  CONSTRAINT employee_fkid" +
+                    "    FOREIGN KEY (user_id)" +
+                    "    REFERENCES user (id)" +
+                    "    ON DELETE CASCADE" +
+                    "    ON UPDATE CASCADE," +
                     "  CONSTRAINT customer_fkid" +
                     "    FOREIGN KEY (user_id)" +
                     "    REFERENCES user (id)" +
