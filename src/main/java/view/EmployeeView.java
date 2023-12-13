@@ -34,7 +34,6 @@ public class EmployeeView {
 
 
     private BookRepositoryMySQL bookRepository;
-    private final TextField idField;
 
     private final TextField authorField;
     private final TextField titleField;
@@ -55,7 +54,7 @@ public class EmployeeView {
 
         window = primaryStage;
 
-        this.idField = new TextField();
+
         this.authorField = new TextField();
         this.titleField = new TextField();
         this.publishedDateField = new DatePicker();
@@ -215,9 +214,7 @@ public class EmployeeView {
         priceField.setText(String.valueOf(book.getPrice()));
     }
 
-    public Long getIdField(){
-        return Long.parseLong(idField.getText());
-    }
+
 
 
     public void clearFields() {
