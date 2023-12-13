@@ -18,4 +18,6 @@ public interface UserRepository {
     boolean existsByUsername(String username);
 
     boolean deleteUserById(Long id);
+
+    boolean updateUser(User user);
 }

@@ -124,6 +124,12 @@ public class AdminView {
         deleteButtonHBox.getChildren().add(deleteButton);
         gridPane.add(deleteButtonHBox, 1, 3);
 
+        updateButton = new Button(" Update ");
+        HBox updateButtonHBox = new HBox(10);
+        updateButtonHBox.setAlignment(Pos.BOTTOM_LEFT);
+        updateButtonHBox.getChildren().add(updateButton);
+        gridPane.add(updateButtonHBox, 2, 3);
+
 
 
     }
@@ -158,6 +164,10 @@ public class AdminView {
 
     public void addDeleteButtonListener(EventHandler<ActionEvent> deleteButtonListener) {
         deleteButton.setOnAction(deleteButtonListener);
+    }
+
+    public void addUpdateButtonListener(EventHandler<ActionEvent> updateButtonListener) {
+        updateButton.setOnAction(updateButtonListener);
     }
 
 

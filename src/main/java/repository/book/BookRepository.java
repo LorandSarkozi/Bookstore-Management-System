@@ -17,4 +17,6 @@ public interface BookRepository {
 
     void updateBookQuantity(Book book);
     boolean deleteBookById(Long id);
+
+    void updateBook(Book book);
 }

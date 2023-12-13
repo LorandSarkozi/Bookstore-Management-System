@@ -75,6 +75,8 @@ public class EmployeeController {
                 selectedBook.setQuantity(updatedBook.getQuantity());
                 selectedBook.setPrice(updatedBook.getPrice());
 
+                bookRepository.updateBook(selectedBook);
+
                 employeeView.getTableView().refresh();
 
                 employeeView.clearFields();

@@ -147,6 +147,24 @@ public class BookRepositoryMySQL implements BookRepository{
         }
     }
 
+    public void updateBook(Book book){
+        try{
+            String sql = "UPDATE book SET author = ?, title = ? , publishedDate = ?, quantity = ?, price = ? WHERE id = ? ";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1,book.getAuthor());
+            statement.setString(2,book.getTitle());
+            statement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
+            statement.setInt(4,book.getQuantity());
+            statement.setFloat(5,book.getPrice());
+            statement.setLong(6,book.getId());
+
+            statement.executeUpdate();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
     public boolean deleteBookById(Long id){
         try {
             String sql = "DELETE FROM book WHERE id = ?";

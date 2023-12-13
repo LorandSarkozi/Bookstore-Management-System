@@ -1,5 +1,6 @@
 package controller;
 
+import com.mysql.cj.jdbc.result.UpdatableResultSet;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -62,6 +63,7 @@ public class AdminController {
         this.adminView.addCreateButtonListener(new AdminController.CreateButtonListener());
         this.adminView.addLogOutButtonListener(new AdminController.LogOutButtonListener());
         this.adminView.addDeleteButtonListener(new AdminController.DeleteButtonListener());
+        this.adminView.addUpdateButtonListener(new AdminController.UpdateButtonListener());
 
     }
 
@@ -144,7 +146,7 @@ public class AdminController {
                     Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                     successAlert.setTitle("Success");
                     successAlert.setHeaderText(null);
-                    successAlert.setContentText("Book deleted successfully!");
+                    successAlert.setContentText("User deleted successfully!");
                     successAlert.showAndWait();
 
                     adminView.getTableView().getItems().remove(selectedUser);
@@ -154,15 +156,81 @@ public class AdminController {
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setTitle("Error");
                     errorAlert.setHeaderText(null);
-                    errorAlert.setContentText("Failed to delete the book!");
+                    errorAlert.setContentText("Failed to delete the User!");
                     errorAlert.showAndWait();
                 }
             } else {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Error");
                 errorAlert.setHeaderText(null);
-                errorAlert.setContentText("Please select a book to delete!");
+                errorAlert.setContentText("Please select a User to delete!");
                 errorAlert.showAndWait();
+            }
+        }
+    }
+
+    private class UpdateButtonListener implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(javafx.event.ActionEvent event) {
+
+            Role customerRole = rightsRolesRepository.findRoleByTitle(adminView.getRole());
+
+            User selectedUser = adminView.getTableView().getSelectionModel().getSelectedItem();
+
+            if (selectedUser != null) {
+                User updatedUser = new UserBuilder()
+                        .setUsername(adminView.getUsername())
+                        .setPassword(adminView.getPassword())
+                        .setRoles(Collections.singletonList(customerRole))
+                        .build();
+
+                selectedUser.setUsername(updatedUser.getUsername());
+                selectedUser.setPassword(updatedUser.getPassword());
+                selectedUser.setRoles(updatedUser.getRoles());
+
+                UserValidator userValidator = new UserValidator(selectedUser);
+
+                boolean userValid = userValidator.validate();
+                Notification<Boolean> userRegisterNotification = new Notification<>();
+
+                if (!userValid){
+                    userValidator.getErrors().forEach(userRegisterNotification::addError);
+                    userRegisterNotification.setResult(Boolean.FALSE);
+                } else {
+                    selectedUser.setPassword(hashPassword(adminView.getPassword()));
+                    userRegisterNotification.setResult(userRepository.updateUser(selectedUser));
+
+                    adminView.getTableView().refresh();
+                    adminView.clearFields();
+
+                }
+
+            } else {
+
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText(null);
+                errorAlert.setContentText("Please select a User to update!");
+                errorAlert.showAndWait();
+            }
+        }
+        private String hashPassword(String password) {
+            try {
+
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+                StringBuilder hexString = new StringBuilder();
+
+                for (byte b : hash) {
+                    String hex = Integer.toHexString(0xff & b);
+                    if (hex.length() == 1) hexString.append('0');
+                    hexString.append(hex);
+                }
+
+                return hexString.toString();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         }
     }

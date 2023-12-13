@@ -159,6 +159,25 @@ public class UserRepositoryMySQL implements UserRepository {
         }
     }
 
+    public boolean updateUser(User user){
+        try{
+            String sql = "UPDATE user SET username = ?, password = ? WHERE id = ? ";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1,user.getUsername());
+            statement.setString(2,user.getPassword());
+            statement.setLong(3,user.getId());
+            rightsRolesRepository.deleteRoles(user);
+            rightsRolesRepository.addRolesToUser(user, user.getRoles());
+
+            int rowsUpdated = statement.executeUpdate();
+            return (rowsUpdated == 1);
+
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 
 }

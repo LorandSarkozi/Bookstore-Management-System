@@ -56,6 +56,11 @@ public class BookRepositoryCacheDecorator extends BookRepositoryDecorator{
         return false;
     }
 
+    @Override
+    public void updateBook(Book book){
+
+    }
+
 
 
 }

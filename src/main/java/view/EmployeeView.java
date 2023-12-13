@@ -114,6 +114,7 @@ public class EmployeeView {
         gridPane.add(priceField, 4, 1);
 
 
+
         gridPane.add(table,5,6);
 
         createButton = new Button("  Create  ");

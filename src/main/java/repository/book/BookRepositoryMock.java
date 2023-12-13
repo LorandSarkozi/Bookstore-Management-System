@@ -52,4 +52,9 @@ public class BookRepositoryMock implements BookRepository{
         }
         return false;
     }
+
+    @Override
+    public void updateBook(Book book){
+
+    }
 }

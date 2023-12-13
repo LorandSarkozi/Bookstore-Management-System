@@ -146,4 +146,17 @@ public class RightsRolesRepositoryMySQL implements RightsRolesRepository {
 
         }
     }
+
+    public void deleteRoles(User user){
+        try{
+            String sql = "DELETE FROM user_role WHERE user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1,user.getId());
+
+            preparedStatement.executeUpdate();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 }
