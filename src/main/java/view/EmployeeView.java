@@ -31,6 +31,7 @@ public class EmployeeView {
     private Button updateButton;
     private Button logOutButton;
     private Button deleteButton;
+    private Button pdfButton;
 
 
     private BookRepositoryMySQL bookRepository;
@@ -151,6 +152,11 @@ public class EmployeeView {
         deleteButtonHBox.getChildren().add(deleteButton);
         gridPane.add(deleteButtonHBox, 0, 4);
 
+        pdfButton = new Button("  Generate PDF  ");
+        HBox pdfButtonHBox = new HBox(20);
+        pdfButtonHBox.setAlignment(Pos.BOTTOM_LEFT);
+        pdfButtonHBox.getChildren().add(pdfButton);
+        gridPane.add(pdfButtonHBox, 0, 5);
 
 
     }
@@ -201,6 +207,10 @@ public class EmployeeView {
 
     public void addSellButtonListener(EventHandler<ActionEvent> sellButtonListener) {
         sellButton.setOnAction(sellButtonListener);
+    }
+
+    public void addPdfButtonListener(EventHandler<ActionEvent> pdfButtonListener) {
+        pdfButton.setOnAction(pdfButtonListener);
     }
 
     public Book getBookDetails() {

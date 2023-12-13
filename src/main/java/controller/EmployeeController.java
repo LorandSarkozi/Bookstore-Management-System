@@ -1,5 +1,13 @@
 package controller;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
+import java.io.File;
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -22,9 +30,14 @@ import view.EmployeeView;
 import view.LoginView;
 import view.CustomerView;
 
+import javax.swing.text.Document;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -53,6 +66,7 @@ public class EmployeeController {
         this.employeeView.addUpdateButtonListener(new EmployeeController.UpdateButtonListener());
         this.employeeView.addDeleteButtonListener(new EmployeeController.DeleteButtonListener());
         this.employeeView.addSellButtonListener(new EmployeeController.SellButtonListener());
+        this.employeeView.addPdfButtonListener(new EmployeeController.PdfButtonListener());
         try{
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","Timea.25");
             bookRepository = new BookRepositoryMySQL(connection);
@@ -214,7 +228,51 @@ public class EmployeeController {
         }
     }
 
+    public class PdfButtonListener implements EventHandler<ActionEvent> {
 
+        @Override
+        public void handle(ActionEvent event) {
 
+            User employee = userRepository.findUserByUsername(loginView.getUsername());
+            //List<Book> books = customerRepository.findAllByEmployeeId(employee.getId());
 
+            try (PDDocument document = new PDDocument()) {
+                PDPage page = new PDPage();
+                document.addPage(page);
+
+                PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(100, 700);
+                contentStream.showText("Books sold by employee: " + employee.getUsername());
+                contentStream.newLine();
+
+               /* for (Book book : books) {
+                    contentStream.showText(book.getAuthor() + " - " + book.getTitle());
+                    contentStream.newLine();
+                }*/
+
+                contentStream.endText();
+
+                contentStream.close();
+
+                File file = new File("SoldBooksReport.pdf");
+                document.save(file);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("PDF Report");
+                alert.setHeaderText(null);
+                alert.setContentText("PDF report generated successfully!");
+                alert.showAndWait();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Failed to generate the PDF report!");
+                alert.showAndWait();
+            }
+        }
+    }
 }
