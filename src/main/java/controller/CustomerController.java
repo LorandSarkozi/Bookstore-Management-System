@@ -40,7 +40,7 @@ public class CustomerController {
         this.customerView.addBuyButtonListener(new BuyButtonListener());
         this.customerView.addLogOutButtonListener(new LogOutButtonListener());
         try{
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","Timea.25");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","");
             bookRepository = new BookRepositoryMySQL(connection);
         }
         catch(SQLException e){

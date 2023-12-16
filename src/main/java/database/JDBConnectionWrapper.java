@@ -11,7 +11,7 @@ public class JDBConnectionWrapper {
     private static final String DB_URL = "jdbc:mysql://localhost/";
 
     private static final String USER = "root";
-    private static final String PASSWORD = "Timea.25";
+    private static final String PASSWORD = "";
     private static final int TIMEOUT = 5;
 
 

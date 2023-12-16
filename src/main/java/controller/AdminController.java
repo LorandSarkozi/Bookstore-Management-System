@@ -51,7 +51,7 @@ public class AdminController {
         this.rightsRolesRepository = rightsRolesRepository;
 
         try{
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","Timea.25");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","");
             userRepository = new UserRepositoryMySQL(connection,rightsRolesRepository);
         }
         catch(SQLException e){

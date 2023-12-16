@@ -68,7 +68,7 @@ public class EmployeeController {
         this.employeeView.addSellButtonListener(new EmployeeController.SellButtonListener());
         this.employeeView.addPdfButtonListener(new EmployeeController.PdfButtonListener());
         try{
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","Timea.25");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","");
             bookRepository = new BookRepositoryMySQL(connection);
             userRepository = new UserRepositoryMySQL(connection,rightsRolesRepository);
             customerRepository = new CustomerRepositoryMySQL(connection);
